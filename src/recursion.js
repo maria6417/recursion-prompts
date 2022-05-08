@@ -6,32 +6,153 @@
 // denoted by n!, is the product of all positive integers less than or equal to n.
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
+
+// I : number
+// O : number
+// C
+// E
+
+// base case
+  // if n equals 0 or 1 or 2 then return the number
+// recusive call
+  // call recursive function by subtracting 1 to the number
+  // accumulate that value (by multiplying the result and n)
+
 var factorial = function(n) {
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
+
+// base case
+  // if the array length is 1, then return the item in array
+// recursive call
+  // call recursive function
+  // accumulate to sum variable (pop out the first element out), and add with recursive function with remaining array
+
 var sum = function(array) {
+  if (array.length === 0) {
+    return 0;
+  }
+
+  if (array.length === 1) {
+    return array[0];
+  }
+
+  var result = 0;
+  result = array[0] + sum(array.slice(1));
+  return result;
+
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
+
+// base case
+  // if given element is not an array, return the element
+// call recursive function
+  // declare result variable
+  // for each element in the given array
+    // call recursive function
+    // accumulate to result variable the result
+// return result
+
 var arraySum = function(array) {
+  if (!Array.isArray(array)) {
+    return array;
+  }
+
+  var result = 0;
+  array.forEach(function(item) {
+    result += arraySum(item);
+  });
+
+  return result;
+
 };
 
 // 4. Check if a number is even.
+// base case
+  // if n equals 0, then it is even
+  // else if n equals 1, then it is odd
+// recursivly call func
+  // pass in n-2
 var isEven = function(n) {
+  if (n < 0) {
+    n = -n;
+  }
+
+  if (n === 0) {
+    return true;
+  } else if (n === 1) {
+    return false;
+  }
+
+  return isEven(n-2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
+
+// strategy
+// base case
+  // if the number is 2, then return 1
+// recursively call function
+  // declare a sum variable
+  // adding to sum, n - 1 and the sum of n - 1 (if positive)
+  // if negative, add to sum -> n + 1 and sum of n + 1
+
+
 var sumBelow = function(n) {
+  if (n === 0 || n === -1) {
+    return 0;
+  }
+
+  var result = 0;
+  if (n < 0) {
+    result += (n + 1) + sumBelow(n + 1);
+  } else {
+    result += (n - 1) + sumBelow(n - 1);
+  }
+  return result;
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
+
+// most simple case -> range(1,1), (1,2) , (2,1) which does not provide any output
+// base case
+  // if x equals y or x + 1 equals y or x equals y + 1
+    // return an empty array
+
+// we will recursively call the function
+  // by adding up 1 to x everytime
+  // or if x is bigger, subtracting 1 everytime
+  // we have to accumulate the value
+  // (3,8) -> [4] + (4,8) -> [4,5] + (5,8) -> [4,5,6] + (6,8) -> [4,5,6,7] + (7,8)
+  // resulting array would be ...
+    // return [x+1].concat(range(x+1, y));
+    // or if x is bigger return [x-1].concat(range(x-1, y));
+
 var range = function(x, y) {
+
+  if (x === y || x + 1 === y || x === y + 1) {
+    return [];
+  }
+
+  if (x < y) {
+    return [x + 1].concat(range(x + 1, y));
+  } else {
+    return [x - 1].concat(range(x - 1, y));
+  }
 };
 
 // 7. Compute the exponent of a number.
@@ -39,29 +160,119 @@ var range = function(x, y) {
 // 8^2 = 8 x 8 = 64. Here, 8 is the base and 2 is the exponent.
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
+
+// most basic case is
+  // when exp is 0, then the result will be 1 no matter what
+
+// we will recursively call the function
+  // if even & positive
+    // (x, n) = (x, n/2) * (x, n/2)
+  // if positive and odd
+    // (x, n) = (x, n-1) * x
+  // if n is negative
+    // (x, n) = 1 / (x, -n)
+
 var exponent = function(base, exp) {
+  if (exp === 0) {
+    return 1;
+  }
+  if (exp < 0) {
+    return 1 / exponent(base, -exp);
+  }
+  if (isEven(exp) && exp > 0) {
+    return exponent(base, exp / 2) * exponent(base, exp / 2);
+  }
+  if (!isEven(exp) && exp > 0) {
+    return exponent(base, exp - 1) * base;
+  }
+
 };
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
+
+// an integer n is a power of two
+// if there exists an integer x such that n === 2 to the power of x
+
+// base case
+  // if n is 1 or 2, then it is true
+
+// recursively pass in the remainding value.
+  // 16 ... 16 / (2 * 2) = nondecimal ?
+  // -> 4 ... 4 / (2*2) = nondecimal ?
+  // -> 1 ... base case -> true
+
+  // 3 ... 3 / (2*2) = nondecimal ?
+  // 10 ... 10 / (2*2) =  nondecimal ?
+
+
 var powerOfTwo = function(n) {
+  if (n === 0) {
+    return false;
+  }
+
+  if (n === 1 || n === 2) {
+    return true;
+  }
+
+  var remainder = n / 4;
+  if (remainder % 1 !== 0) {
+    return false;
+  } else {
+    return powerOfTwo(remainder);
+  }
+
 };
 
 // 9. Write a function that reverses a string.
+// base case
+  // if string length is 1, just return the string
+// recursive case
+  // 'Hello' -> last letter + reverse('Hell');
+
 var reverse = function(string) {
+
+  if (string.length === 1) {
+    return string;
+  }
+
+  return string[string.length-1] + reverse(string.slice(0, -1));
+
 };
 
 // 10. Write a function that determines if a string is a palindrome.
+// base case
+  // if the string length is 1 or 0, return true
+// 'racecar' -> take out first and last and compare
+  // if true then recursively call for the rest of the string
+  // if not true then just return false;
+
 var palindrome = function(string) {
+
+  string = string.replace(' ', '').toLowerCase();
+
+  if (string.length === 1 || string.length === 0) {
+    return true;
+  }
+
+  if (string[0] === string[string.length - 1]) {
+    return palindrome(string.slice(1, -1));
+  }
+
+  return false;
+
 };
+
+
 
 // 11. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
 // modulo(5,2) // 1
 // modulo(17,5) // 2
-// modulo(22,6) // 4
+// modulo(22,6) // 4'
+
 var modulo = function(x, y) {
 };
 
@@ -135,7 +346,29 @@ var countKeysInObj = function(obj, key) {
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
+
+// iterate through the object
+// base case
+  // if the value is not an object, then just count, and return the count
+// recursive case
+  // if the value is an object, then go through that object
+  // by passing in that object
+  // accumulate the counter returned by the recursive function
+
 var countValuesInObj = function(obj, value) {
+
+  var count = 0;
+  for (var key in obj) {
+    if (typeof obj[key] !== 'object') {
+      if (obj[key] === value) {
+        count ++;
+      }
+    } else {
+      count += countValuesInObj(obj[key], value);
+    }
+  }
+  return count;
+
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
